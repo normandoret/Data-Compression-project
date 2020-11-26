@@ -1,0 +1,5 @@
+https://github.com/nayuki/Reference-Huffman-coding
+
+
+
+https://github.com/dmitrykravchenko2018/arithmetic_coding
