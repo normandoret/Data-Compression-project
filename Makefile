@@ -3,8 +3,8 @@
 OUT_DIR = output
 
 
-.PHONY: build
-build: arithmetic lz77
+.PHONY: all
+all: arithmetic lz77 lzw
 
 ARITHMETIC_DIR = Arithmetic
 ARITHMETIC_SRCS = $(ARITHMETIC_DIR)/*.cpp
@@ -21,6 +21,12 @@ LZ77_EXECUTABLE = lz77
 .PHONY: lz77
 lz77: create_out_dir
 	gcc -O2 -std=c90 -o $(OUT_DIR)/$(LZ77_EXECUTABLE) $(LZ77_SRCS) -I$(LZ77_DIR)
+
+LZW_DIR = lzw
+LZW_EXECUTABLE = lzw
+.PHONY: lzw
+lzw: create_out_dir
+	gcc -O2 -o $(OUT_DIR)/$(LZW_EXECUTABLE) $(LZW_DIR)/lzw.c -I$(LZW_DIR)
 
 .PHONY: test
 test:
