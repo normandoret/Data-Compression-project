@@ -4,7 +4,14 @@ OUT_DIR = output
 
 
 .PHONY: all
-all: tunstall arithmetic lz77 lzw
+all: adaptive_huffman tunstall arithmetic lz77 lzw
+
+ADAPTHUFF_DIR = adaptive-huffman
+ADAPTHUFF_SRCS = $(ADAPTHUFF_DIR)/*.c
+ADAPTHUFF_EXECUTABLE = adaptive-huffman
+.PHONY: adaptive_huffman
+adaptive_huffman: create_out_dir
+	gcc -O2 -std=c99 -lm -o $(OUT_DIR)/$(ADAPTHUFF_EXECUTABLE) $(ADAPTHUFF_SRCS) -I$(ADAPTHUFF_DIR)
 
 TUNSTALL_DIR = tunstall
 TUNSTALL_SRCS += \
