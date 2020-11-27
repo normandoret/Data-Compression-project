@@ -46,7 +46,7 @@ LZ77_SRCS =	$(LZ77_DIR)/*.c
 LZ77_EXECUTABLE = lz77
 .PHONY: lz77
 lz77: create_out_dir
-	gcc -O2 -std=c90 -o $(OUT_DIR)/$(LZ77_EXECUTABLE) $(LZ77_SRCS) -I$(LZ77_DIR)
+	gcc -O2 -o $(OUT_DIR)/$(LZ77_EXECUTABLE) $(LZ77_SRCS) -I$(LZ77_DIR) -lm
 
 
 LZW_DIR = lzw
@@ -66,8 +66,8 @@ compress-all: build
 		-c $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(ADAPTHUFF_EXECUTABLE);)
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(ARITHMETIC_EXECUTABLE) \
 		e $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(ARITHMETIC_EXECUTABLE);)
-	# $(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZ77_EXECUTABLE) \
-	# 	-i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(LZ77_EXECUTABLE);)
+	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZ77_EXECUTABLE) \
+		-c -i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(LZ77_EXECUTABLE);)
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZW_EXECUTABLE) \
 		c $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE);)
 	
