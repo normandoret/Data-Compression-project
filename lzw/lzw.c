@@ -20,7 +20,7 @@ int main(int argc, char** argv) { // number of arguments, arguments array
     if (argc > 2) {
         if (strcmp(argv[1], "c") == 0) { // compression 
             inputFile = fopen(argv[2], "r"); // read from the input file (HTML)
-            outputFile = fopen(strcat(argv[2], ".lzw"), "w+b"); // binary write to output file 
+            outputFile = fopen(argv[3], "w+b"); // binary write to output file 
             
             if (outputFile == NULL || inputFile == NULL) {
                 printf("Can't open files\n'"); return 0;
@@ -29,11 +29,7 @@ int main(int argc, char** argv) { // number of arguments, arguments array
             compress(inputFile, outputFile);
         } else { // decompression
             inputFile = fopen(argv[2], "rb"); // binary read from the input file
-
-            char temp[20]; int length = strlen(argv[2])-4;
-            strncpy(temp, argv[2], length);
-            temp[length] = '\0';
-            outputFile = fopen(temp, "w"); // write to output file (HTML)
+            outputFile = fopen(argv[3], "w"); // write to output file (HTML)
             
             if (outputFile == NULL || inputFile == NULL) {
                 printf("Can't open files\n'"); return 0;

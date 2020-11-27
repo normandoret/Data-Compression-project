@@ -1,10 +1,11 @@
 #!/usr/bin/make -f
 
 OUT_DIR = output
+COMPRESSED_DATA_DIR=$(OUT_DIR)/compressed
+DECOMPRESSED_DATA_DIR=$(OUT_DIR)/decompressed
 
-
-.PHONY: all
-all: static_huffman adaptive_huffman tunstall arithmetic lz77 lzw
+.PHONY: build
+build: static_huffman adaptive_huffman tunstall arithmetic lz77 lzw
 
 
 STATHUFF_DIR = static-huffman
@@ -55,8 +56,21 @@ lzw: create_out_dir
 	gcc -O2 -o $(OUT_DIR)/$(LZW_EXECUTABLE) $(LZW_DIR)/lzw.c -I$(LZW_DIR)
 
 
-.PHONY: test
-test:
+TARGET_DATA_SETS=dnahh englishhh SD1 SD2 SD3 SD4 xmlhh
+DATA_DIR=Data
+.PHONY: compress-all
+compress-all: build
+	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(STATHUFF_EXECUTABLE) \
+		-i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(STATHUFF_EXECUTABLE);)
+	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(ADAPTHUFF_EXECUTABLE) \
+		-c $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(ADAPTHUFF_EXECUTABLE);)
+	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(ARITHMETIC_EXECUTABLE) \
+		e $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(ARITHMETIC_EXECUTABLE);)
+	# $(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZ77_EXECUTABLE) \
+	# 	-i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(LZ77_EXECUTABLE);)
+	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZW_EXECUTABLE) \
+		c $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE);)
+	
 
 .PHONY: clean
 clean:
@@ -64,4 +78,4 @@ clean:
 
 .PHONY: create_out_dir
 create_out_dir:
-	mkdir -p $(OUT_DIR)
+	mkdir -p $(OUT_DIR) $(COMPRESSED_DATA_DIR) $(DECOMPRESSED_DATA_DIR)

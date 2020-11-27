@@ -8,3 +8,6 @@
 5. Arithmetic coding: https://github.com/dmitrykravchenko2018/arithmetic_coding
 6. LZ77: https://github.com/ariya/FastLZ
 7. LZW: https://github.com/radekstepan/LZW
+
+
+TODO: review (lzw, arithmetic) / implement the main of tunstall and lz77 
