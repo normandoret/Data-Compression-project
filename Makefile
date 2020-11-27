@@ -50,10 +50,11 @@ lz77: create_out_dir
 
 
 LZW_DIR = lzw
+LZW_SRCS =	$(LZW_DIR)/*.c
 LZW_EXECUTABLE = lzw
 .PHONY: lzw
 lzw: create_out_dir
-	gcc -O2 -o $(OUT_DIR)/$(LZW_EXECUTABLE) $(LZW_DIR)/lzw.c -I$(LZW_DIR)
+	gcc -O2 -o $(OUT_DIR)/$(LZW_EXECUTABLE) $(LZW_SRCS) -I$(LZW_DIR)
 
 
 TARGET_DATA_SETS=dnahh englishhh SD1 SD2 SD3 SD4 xmlhh
@@ -69,7 +70,7 @@ compress-all: build
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZ77_EXECUTABLE) \
 		-c -i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(LZ77_EXECUTABLE);)
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZW_EXECUTABLE) \
-		c $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE);)
+		-c -i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE);)
 	
 
 .PHONY: clean
