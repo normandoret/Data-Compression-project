@@ -5,5 +5,5 @@
 3. Golomb codes: 
 4. Tunstall codes: 
 5. Arithmetic coding: https://github.com/dmitrykravchenko2018/arithmetic_coding
-6. LZ77: https://github.com/fail0verflow/hbc/blob/master/channel/banner/tools/lz77.c
+6. LZ77: https://github.com/ariya/FastLZ
 7. LZW: 
