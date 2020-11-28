@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -99,16 +100,38 @@ int main(const int argc, const char* const argv[]) {
         std::cout << "Usage: tunstall [c|d] <input_of_file> <output_file>" << std::endl;
         return -1;
     }
+
+    // read the input file into memory.
+    std::ifstream fin(argv[2], std::ios::binary);
+    if(!fin.is_open()) {
+        std::cerr << "Failed to open input file: " << argv[2] << std::endl;
+        return -1;
+    }
+    std::vector<unsigned char> input_file(
+        (std::istreambuf_iterator<char>(fin)),
+        std::istreambuf_iterator<char>());
+
+    std::vector<uint8_t> processed_data;
     if (argv[1][0] == 'c') {
-        // compress
+        processed_data = tunstall_compress(input_file);
     }
     else if (argv[1][0] == 'd') {
-        // decompress
+        processed_data = tunstall_decompress(input_file);
     }
     else {
         std::cerr << "Invalid option: " << argv[1][0] << std::endl;
         return -1;
     }
+
+    std::ofstream fout(argv[3], std::ios::binary);
+    if(!fout.is_open())
+    {
+        std::cerr << "Failed to open output file: " << argv[3] << std::endl;
+        return -1;
+    }
+    fout.write(
+        reinterpret_cast<char*>(processed_data.data()),
+        processed_data.size());
 
     return 0;
 }

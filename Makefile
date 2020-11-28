@@ -65,6 +65,8 @@ compress-all: build
 		-i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(STATHUFF_EXECUTABLE);)
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(ADAPTHUFF_EXECUTABLE) \
 		-c $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(ADAPTHUFF_EXECUTABLE);)
+	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(TUNSTALL_EXECUTABLE) \
+		c $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(TUNSTALL_EXECUTABLE);)
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(ARITHMETIC_EXECUTABLE) \
 		e $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(ARITHMETIC_EXECUTABLE);)
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZ77_EXECUTABLE) \
