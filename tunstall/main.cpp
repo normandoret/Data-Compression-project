@@ -61,7 +61,7 @@ std::vector<std::uint8_t> tunstall_compress(std::unique_ptr<unsigned char[]> dat
 std::vector<std::uint8_t> tunstall_dempress(
     std::unique_ptr<unsigned char[]> data, int size) {
     std::vector<std::uint8_t> decompressed_data;
-    unsigned char* src_ptr = data.get();
+    const unsigned char* src_ptr = data.get();
     crt::Tunstall t;
 
     // 1. Read the prob list size

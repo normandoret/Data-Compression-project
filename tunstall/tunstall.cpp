@@ -412,9 +412,9 @@ unsigned char *Tunstall::compress(unsigned char *data, int input_size, int &outp
 	return output;
 }
 
-void Tunstall::decompress(unsigned char *data, int input_size, unsigned char *output, int output_size) {
+void Tunstall::decompress(const unsigned char *data, int input_size, unsigned char *output, int output_size) {
 	unsigned char *end_output = output + output_size;
-	unsigned char *end_data = data + input_size -1;
+	const unsigned char *end_data = data + input_size -1;
 	if(probabilities.size() == 1) {
 		memset(output, probabilities[0].symbol, output_size);
 		return;

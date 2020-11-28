@@ -62,7 +62,7 @@ public:
 
 	//output_size is the NUMBER of symbols created (and the output is 1 symbol 1 char)
 	//we need it because of the padding!
-	void decompress(unsigned char *data, int input_size, unsigned char *output, int output_size);
+	void decompress(const unsigned char *data, int input_size, unsigned char *output, int output_size);
 	//we can do without the input size.
 	int decompress(unsigned char *data, unsigned char *output, int output_size);
 
