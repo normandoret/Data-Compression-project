@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -14,23 +15,24 @@
  * Serialization Format: [uint32_t, bytes, int, int, bytes]
  * Description: prob list size / prob list  / raw_data_size / compressed_data_size / compressed_data
  * */ 
-// 
 
-std::vector<std::uint8_t> tunstall_compress(std::unique_ptr<unsigned char[]> data, int size) {
+
+std::vector<std::uint8_t> tunstall_compress(std::vector<unsigned char> data) {
 	crt::Tunstall t;
-	t.getProbabilities(data.get(), size);
+	t.getProbabilities(data.data(), data.size());
 
 	t.createDecodingTables2();
 	t.createEncodingTables();
 
 	int compressed_size;
-	auto *compressed_data = t.compress(data.get(), size, compressed_size);
+    int raw_data_size = static_cast<int>(data.size());
+	auto *compressed_data = t.compress(data.data(), data.size(), compressed_size);
 
     uint32_t prob_list_size = t.probabilities.size() * sizeof(t.probabilities[0]);
     uint64_t total_size =
         sizeof(prob_list_size) +
         prob_list_size +
-        sizeof(size) +
+        sizeof(raw_data_size) +
         sizeof(compressed_size) +
         compressed_size;
     std::vector<std::uint8_t> serialized_data(total_size);
@@ -46,11 +48,11 @@ std::vector<std::uint8_t> tunstall_compress(std::unique_ptr<unsigned char[]> dat
         dest_ptr += prob_list_size;
         
         // 3. write the original data size and compressed data size.
-        std::memcpy(dest_ptr, &size, sizeof(size));
-	    dest_ptr += sizeof(size);
+        std::memcpy(dest_ptr, &raw_data_size, sizeof(int));
+	    dest_ptr += sizeof(int);
         
-        std::memcpy(dest_ptr, &compressed_size, sizeof(compressed_size));
-	    dest_ptr += sizeof(compressed_size);
+        std::memcpy(dest_ptr, &compressed_size, sizeof(int));
+	    dest_ptr += sizeof(int);
 
         // 4. write the compressed data size.
         std::memcpy(dest_ptr, compressed_data, compressed_size);
@@ -58,10 +60,10 @@ std::vector<std::uint8_t> tunstall_compress(std::unique_ptr<unsigned char[]> dat
     return serialized_data;
 }
 
-std::vector<std::uint8_t> tunstall_dempress(
-    std::unique_ptr<unsigned char[]> data, int size) {
+std::vector<std::uint8_t> tunstall_decompress(
+    std::vector<unsigned char> data) {
     std::vector<std::uint8_t> decompressed_data;
-    const unsigned char* src_ptr = data.get();
+    const unsigned char* src_ptr = data.data();
     crt::Tunstall t;
 
     // 1. Read the prob list size
@@ -92,7 +94,21 @@ std::vector<std::uint8_t> tunstall_dempress(
     return decompressed_data;
 }
 
-int main() {
-    
+int main(const int argc, const char* const argv[]) {
+    if (argc < 4) {
+        std::cout << "Usage: tunstall [c|d] <input_of_file> <output_file>" << std::endl;
+        return -1;
+    }
+    if (argv[1][0] == 'c') {
+        // compress
+    }
+    else if (argv[1][0] == 'd') {
+        // decompress
+    }
+    else {
+        std::cerr << "Invalid option: " << argv[1][0] << std::endl;
+        return -1;
+    }
+
     return 0;
 }
