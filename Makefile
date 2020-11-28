@@ -50,7 +50,7 @@ lz77: create_out_dir
 
 
 LZW_DIR = lzw
-LZW_SRCS =	$(LZW_DIR)/*.c
+LZW_SRCS =	$(LZW_DIR)/lzw.c
 LZW_EXECUTABLE = lzw
 .PHONY: lzw
 lzw: create_out_dir
@@ -72,7 +72,7 @@ compress-all: build
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZ77_EXECUTABLE) \
 		-c -i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(LZ77_EXECUTABLE);)
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZW_EXECUTABLE) \
-		-c -i $(DATA_DIR)/$(data) -o $(COMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE);)
+		c $(DATA_DIR)/$(data) $(COMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE);)
 	
 .PHONY: decompress-all
 decompress-all:
@@ -87,7 +87,7 @@ decompress-all:
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZ77_EXECUTABLE) \
 		-d -i $(COMPRESSED_DATA_DIR)/$(data).$(LZ77_EXECUTABLE) -o $(DECOMPRESSED_DATA_DIR)/$(data).$(LZ77_EXECUTABLE);)
 	$(foreach data,$(TARGET_DATA_SETS),$(OUT_DIR)/$(LZW_EXECUTABLE) \
-		-d -i $(COMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE) -o $(DECOMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE);)
+		d $(COMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE) $(DECOMPRESSED_DATA_DIR)/$(data).$(LZW_EXECUTABLE);)
 
 .PHONY: clean
 clean:
