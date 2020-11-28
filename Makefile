@@ -5,7 +5,7 @@ COMPRESSED_DATA_DIR=$(OUT_DIR)/compressed
 DECOMPRESSED_DATA_DIR=$(OUT_DIR)/decompressed
 
 .PHONY: build
-build: static_huffman adaptive_huffman tunstall arithmetic lz77 lzw
+build: static_huffman adaptive_huffman golomb tunstall arithmetic lz77 lzw
 
 
 STATHUFF_DIR = static-huffman
@@ -22,6 +22,13 @@ ADAPTHUFF_EXECUTABLE = adaptive-huffman
 .PHONY: adaptive_huffman
 adaptive_huffman: create_out_dir
 	gcc -O2 -std=c99 -lm -o $(OUT_DIR)/$(ADAPTHUFF_EXECUTABLE) $(ADAPTHUFF_SRCS) -I$(ADAPTHUFF_DIR)
+
+GOLOMB_DIR = golomb-coding
+GOLOMB_SRCS = $(GOLOMB_DIR)/*.c
+GOLOMB_EXECUTABLE = golomb
+.PHONY: golomb
+golomb: create_out_dir
+	gcc -O2 -o $(OUT_DIR)/$(GOLOMB_EXECUTABLE) $(GOLOMB_SRCS) -I$(GOLOMB_DIR) -lz -lm
 
 TUNSTALL_DIR = tunstall
 TUNSTALL_SRCS += \
